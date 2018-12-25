@@ -1,3 +1,7 @@
+
+cmake-build-debug/
+.DS_Store
+
 ## Simulator specific ignores
 
 config/LastScenario.txt
