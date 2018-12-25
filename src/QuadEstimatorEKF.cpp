@@ -170,6 +170,18 @@ VectorXf QuadEstimatorEKF::PredictState(VectorXf curState, float dt, V3F accel, 
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+  // this is the dead reckoning approach introduced in the lectures
+
+  auto accelInertia = attitude.Rotate_BtoI(accel);
+
+  // x, y, z
+  predictedState(0) += dt * curState(3 + 0);
+  predictedState(1) += dt * curState(3 + 1);
+  predictedState(2) += dt * curState(3 + 2);
+
+  predictedState(3) += dt * accelInertia.x;
+  predictedState(3 + 1) += dt * accelInertia.y;
+  predictedState(3 + 2) += (- dt * CONST_GRAVITY + dt * accelInertia.z);
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -197,6 +209,14 @@ MatrixXf QuadEstimatorEKF::GetRbgPrime(float roll, float pitch, float yaw)
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+  // eq (52) https://www.overleaf.com/read/vymfngphcccj#/54894644/
+
+  RbgPrime(0, 0) = -cos(pitch) * sin(yaw);
+  RbgPrime(0,1) = -sin(roll) * sin(pitch) * sin(yaw) - cos(pitch) * cos(yaw);
+  RbgPrime(0,2) = -cos(roll) * sin(pitch) * sin(yaw) + sin(roll) * cos(yaw);
+  RbgPrime(1,0) = cos(pitch) * cos(yaw);
+  RbgPrime(1,1) = sin(roll) * sin(pitch) * cos(yaw) - cos(roll) * sin(yaw);
+  RbgPrime(1,2) = cos(roll) * sin(pitch) * cos(yaw) + sin(roll) * sin(yaw);
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -243,6 +263,15 @@ void QuadEstimatorEKF::Predict(float dt, V3F accel, V3F gyro)
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+  // eq (51) https://www.overleaf.com/read/vymfngphcccj#/54894644/
+  gPrime(0,3) = dt;
+  gPrime(1,4) = dt;
+  gPrime(2,5) = dt;
+  gPrime(3, 6) = (RbgPrime(0) * accel).sum() * dt;
+  gPrime(4, 6) = (RbgPrime(1) * accel).sum() * dt;
+  gPrime(5, 6) = (RbgPrime(2) * accel).sum() * dt;
+
+  ekfCov = Q + gPrime * ekfCov * gPrime.transpose();
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
