@@ -4,12 +4,12 @@
 # X=Y sets X to Y. Y may be a string, float, or list of 3 floats
 ############################################################################
 
-[QuadControlParams] 
+[QuadControlParams]
 
 UseIdealEstimator=1
 
 # Physical properties
-Mass = 0.5
+Mass = 0.495  # 0.5 in the physical param txt
 L = 0.17
 Ixx = 0.0023
 Iyy = 0.0023
@@ -19,20 +19,21 @@ minMotorThrust = .1
 maxMotorThrust = 4.5
 
 # Position control gains
-kpPosXY = 2
-kpPosZ = 2
-KiPosZ = 50
+kpPosXY = 33
+kpPosZ = 22
+KiPosZ = 49
 
 # Velocity control gains
-kpVelXY = 8
-kpVelZ = 8
+# TODO this should be greater 3-4  times compared to pos gain, but seems to work for me like this
+kpVelXY = 15
+kpVelZ = 12
 
 # Angle control gains
 kpBank = 12
-kpYaw = 3
+kpYaw = 4
 
 # Angle rate gains
-kpPQR = 70, 70, 15
+kpPQR = 75, 75, 5
 
 # limits
 maxAscentRate = 5
