@@ -40,3 +40,5 @@ I copied the code and config from the last project (https://github.com/magnusja/
 * Tune controller parameters again (drone still looks shaky sometimes)
 * Implement UKF :)
 
+#### References
+[1] Estimation for Quadrotors (https://www.overleaf.com/read/vymfngphcccj#/54894644/)
