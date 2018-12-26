@@ -172,6 +172,8 @@ VectorXf QuadEstimatorEKF::PredictState(VectorXf curState, float dt, V3F accel, 
 
   // this is the dead reckoning approach introduced in the lectures
 
+  // eq (49) in https://www.overleaf.com/read/vymfngphcccj#/54894644/
+
   auto accelInertia = attitude.Rotate_BtoI(accel);
 
   // x, y, z
